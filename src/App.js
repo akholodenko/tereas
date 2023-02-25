@@ -1,11 +1,7 @@
 import './App.css'
 
 function App() {
-  const fun = () => {
-    console.log('test' + process.env.REACT_APP_apiKey)
-  }
-
-  fun()
+  console.log(`api key ${process.env.REACT_APP_apiKey}`)
   return <div className="App">test</div>
 }
 
