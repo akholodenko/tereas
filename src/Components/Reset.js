@@ -7,12 +7,13 @@ import './Reset.css'
 
 const Reset = () => {
   const [email, setEmail] = useState('')
-  const [user, loading, error] = useAuthState(auth)
+  const [user, loading] = useAuthState(auth)
   const navigate = useNavigate()
   useEffect(() => {
     if (loading) return
     if (user) navigate('/dashboard')
-  }, [user, loading])
+  }, [user, loading, navigate])
+
   return (
     <div className="reset">
       <div className="reset__container">
@@ -20,7 +21,7 @@ const Reset = () => {
           type="text"
           className="reset__textBox"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={e => setEmail(e.target.value)}
           placeholder="E-mail Address"
         />
         <button className="reset__btn" onClick={() => sendPasswordReset(email)}>
