@@ -5,10 +5,12 @@ import Login from './Components/Login'
 import Register from './Components/Register'
 import Reset from './Components/Reset'
 import Dashboard from './Components/Dashboard'
+import NavBar from './Components/AppBar'
 
 function App() {
   return (
     <div className="App">
+      <NavBar></NavBar>
       <Router>
         <Routes>
           <Route exact path="/" element={<Login />} />
