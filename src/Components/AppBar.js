@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
@@ -10,8 +10,11 @@ import MenuIcon from '@mui/icons-material/Menu'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth, logout } from './../firebase'
 
+import { UserContext } from '../Contexts/UserContext'
+
 const NavBar = () => {
   const [user] = useAuthState(auth)
+  const userInfo = useContext(UserContext)
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -31,7 +34,7 @@ const NavBar = () => {
           </Typography>
           {user && (
             <Button color="inherit" onClick={logout}>
-              {user.email} | Logout
+              {userInfo.name} | Logout
             </Button>
           )}
         </Toolbar>

@@ -20,7 +20,7 @@ const Login = () => {
       return
     }
     if (user) {
-      console.log(user)
+      // console.log(user)
       navigate('/dashboard')
     }
   }, [user, loading, navigate])
