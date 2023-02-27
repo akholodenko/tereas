@@ -30,7 +30,7 @@ function App() {
 
   return (
     <div className="App">
-      <UserContext.Provider value={userInfo}>
+      <UserContext.Provider value={{ userInfo, setUserInfo }}>
         <NavBar></NavBar>
         <Router>
           <Routes>
