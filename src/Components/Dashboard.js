@@ -8,10 +8,10 @@ import { TaskListsContext } from '../Contexts/TaskListsContext'
 import { Grid } from '@mui/material'
 import Container from '@mui/material/Container'
 import Button from '@mui/material/Button'
-import Tabs from '@mui/material/Tabs'
-import Tab from '@mui/material/Tab'
 
 import NewTaskListModal from './NewTaskListModal'
+import Tasks from './Tasks'
+import TasksLists from './TaskLists'
 
 const Dashboard = () => {
   const [user, loading] = useAuthState(auth)
@@ -19,10 +19,13 @@ const Dashboard = () => {
   const [taskLists, setTaskLists] = useState([])
   const [isNewTaskModalOpen, setIsNewTaskModalOpen] = useState(false)
 
-  const [selectedTaskList, setSelectedTaskList] = React.useState(0)
+  const [selectedTaskListIndex, setSelectedTaskListIndex] = React.useState(0)
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setSelectedTaskList(newValue)
+  const handleSelectedTaskListChange = (
+    event: React.SyntheticEvent,
+    newValue: number
+  ) => {
+    setSelectedTaskListIndex(newValue)
   }
 
   useEffect(() => {
@@ -37,17 +40,12 @@ const Dashboard = () => {
   const onNewTaskModalClosed = () => {
     setIsNewTaskModalOpen(false)
     if (taskLists && taskLists.length) {
-      console.log('go', taskLists.length)
-      setSelectedTaskList(taskLists.length)
+      setSelectedTaskListIndex(taskLists.length)
     }
   }
 
-  const taskListTabProps = (index: number) => {
-    return {
-      id: `vertical-tab-${index}`,
-      'aria-controls': `vertical-tabpanel-${index}`,
-    }
-  }
+  const selectedTaskList = () =>
+    taskLists && taskLists.length ? taskLists[selectedTaskListIndex] : null
 
   return (
     <div className="dashboard">
@@ -56,22 +54,11 @@ const Dashboard = () => {
           <Grid container spacing={2}>
             <Grid item xs={4}>
               {taskLists && taskLists.length ? (
-                <Tabs
-                  orientation="vertical"
-                  variant="scrollable"
-                  value={selectedTaskList}
-                  onChange={handleChange}
-                  aria-label="Vertical tabs example"
-                  sx={{ borderRight: 1, borderColor: 'divider' }}
-                >
-                  {taskLists.map((taskList, index) => (
-                    <Tab
-                      key={index}
-                      label={taskList.name}
-                      {...taskListTabProps(index)}
-                    />
-                  ))}
-                </Tabs>
+                <TasksLists
+                  taskLists={taskLists}
+                  selectedTaskListIndex={selectedTaskListIndex}
+                  handleSelectedTaskListChange={handleSelectedTaskListChange}
+                />
               ) : (
                 <span></span>
               )}
@@ -85,7 +72,7 @@ const Dashboard = () => {
               />
             </Grid>
             <Grid item xs={8}>
-              list task items
+              <Tasks taskList={selectedTaskList()} />
             </Grid>
           </Grid>
         </Container>
