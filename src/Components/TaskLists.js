@@ -6,7 +6,7 @@ const TasksLists = ({
   selectedTaskListIndex,
   handleSelectedTaskListChange,
 }) => {
-  const taskListTabProps = (index: number) => {
+  const taskListTabProps = index => {
     return {
       id: `vertical-tab-${index}`,
       'aria-controls': `vertical-tabpanel-${index}`,

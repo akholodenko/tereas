@@ -8,8 +8,7 @@ import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 
 import { TaskListsContext } from '../Contexts/TaskListsContext'
-
-const ENTER = 13
+import { ENTER_KEY_NUMBER } from '../Constants'
 
 const NewTaskListModal = ({ isOpen, onNewTaskModalClosed }) => {
   const [taskListName, setTaskListName] = useState('')
@@ -31,8 +30,8 @@ const NewTaskListModal = ({ isOpen, onNewTaskModalClosed }) => {
     setTaskListName('')
   }
 
-  const handleEnterKey = (e) => {
-    if (e.keyCode === ENTER) {
+  const handleEnterKey = e => {
+    if (e.keyCode === ENTER_KEY_NUMBER) {
       handleCreate()
     }
   }
@@ -42,7 +41,7 @@ const NewTaskListModal = ({ isOpen, onNewTaskModalClosed }) => {
     handleClose()
   }
 
-  const handleTaskListNameChange = (e) => {
+  const handleTaskListNameChange = e => {
     setTaskListName(e.target.value)
   }
 

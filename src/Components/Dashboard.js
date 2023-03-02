@@ -21,10 +21,7 @@ const Dashboard = () => {
 
   const [selectedTaskListIndex, setSelectedTaskListIndex] = React.useState(0)
 
-  const handleSelectedTaskListChange = (
-    event: React.SyntheticEvent,
-    newValue: number
-  ) => {
+  const handleSelectedTaskListChange = (event, newValue) => {
     setSelectedTaskListIndex(newValue)
   }
 
@@ -72,7 +69,7 @@ const Dashboard = () => {
               />
             </Grid>
             <Grid item xs={8}>
-              <Tasks taskList={selectedTaskList()} />
+              <Tasks selectedTaskListIndex={selectedTaskListIndex} />
             </Grid>
           </Grid>
         </Container>
