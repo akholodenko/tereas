@@ -1,9 +1,12 @@
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 
+import { tasksCount } from '../utils'
+
 const TasksLists = ({
   taskLists,
   selectedTaskListIndex,
+  tasks,
   handleSelectedTaskListChange,
 }) => {
   const taskListTabProps = index => {
@@ -12,6 +15,7 @@ const TasksLists = ({
       'aria-controls': `vertical-tabpanel-${index}`,
     }
   }
+
   return (
     <Tabs
       orientation="vertical"
@@ -24,7 +28,7 @@ const TasksLists = ({
       {taskLists.map((taskList, index) => (
         <Tab
           key={index}
-          label={`${taskList.name} (${taskList?.tasks?.length})`}
+          label={`${taskList.name} (${tasksCount(tasks[taskList.id])})`}
           {...taskListTabProps(index)}
         />
       ))}

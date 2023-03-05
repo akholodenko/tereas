@@ -41,6 +41,6 @@ export const fetchTasklistTasks = async tasklistId => {
     return processedTasks
   } catch (err) {
     console.error(err)
-    alert('An error occured while fetching user task list data')
+    alert('An error occured while fetching user tasks data')
   }
 }

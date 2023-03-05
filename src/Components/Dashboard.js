@@ -18,6 +18,7 @@ const Dashboard = () => {
   const [user, loading] = useAuthState(auth)
   const navigate = useNavigate()
   const [taskLists, setTaskLists] = useState([])
+  const [tasks, setTasks] = useState({})
   const [isNewTaskModalOpen, setIsNewTaskModalOpen] = useState(false)
 
   const [selectedTaskListIndex, setSelectedTaskListIndex] = useState(0)
@@ -38,17 +39,13 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (taskLists.length) {
-      console.log(
-        'fetch tasks for tasklist',
-        selectedTaskListIndex,
-        selectedTaskList()?.id
-      )
-
       fetchTasklistTasks(selectedTaskList().id).then(data => {
-        console.log('fetchTasklistTasks', data)
+        let newTasks = { ...tasks }
+        newTasks[selectedTaskList().id] = data
+        setTasks(newTasks)
       })
     }
-  }, [selectedTaskListIndex, taskLists])
+  }, [taskLists])
 
   const onNewTaskModalOpen = () => {
     setIsNewTaskModalOpen(true)
@@ -61,8 +58,31 @@ const Dashboard = () => {
     }
   }
 
+  const onCreateNewTask = newTaskName => {
+    let tempTasks = { ...tasks }
+    if (
+      tempTasks[selectedTaskList().id] &&
+      tempTasks[selectedTaskList().id].length
+    ) {
+      tempTasks[selectedTaskList().id].push({ name: newTaskName })
+    } else {
+      tempTasks[selectedTaskList().id] = [{ name: newTaskName }]
+    }
+
+    console.log(
+      'TODO: call DB to store new task for tasklist',
+      selectedTaskList().id,
+      newTaskName
+    )
+
+    setTasks({ ...tempTasks })
+  }
+
   const selectedTaskList = () =>
     taskLists && taskLists.length ? taskLists[selectedTaskListIndex] : null
+
+  const selectedTaskListTasks = () =>
+    tasks && tasks.length ? tasks[selectedTaskList().id] : null
 
   return (
     <div className="dashboard">
@@ -74,6 +94,7 @@ const Dashboard = () => {
                 <TasksLists
                   taskLists={taskLists}
                   selectedTaskListIndex={selectedTaskListIndex}
+                  tasks={tasks}
                   handleSelectedTaskListChange={handleSelectedTaskListChange}
                 />
               ) : (
@@ -89,7 +110,11 @@ const Dashboard = () => {
               />
             </Grid>
             <Grid item xs={8}>
-              <Tasks selectedTaskListIndex={selectedTaskListIndex} />
+              <Tasks
+                selectedTaskListIndex={selectedTaskListIndex}
+                selectedTaskListTasks={tasks[selectedTaskList()?.id]}
+                onCreateNewTask={onCreateNewTask}
+              />
             </Grid>
           </Grid>
         </Container>

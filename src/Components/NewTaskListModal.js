@@ -37,7 +37,7 @@ const NewTaskListModal = ({ isOpen, onNewTaskModalClosed }) => {
   }
 
   const handleCreate = () => {
-    setTaskLists([...taskLists, { name: taskListName, tasks: [] }])
+    setTaskLists([...taskLists, { name: taskListName }])
     handleClose()
   }
 

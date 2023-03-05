@@ -2,24 +2,23 @@ import { Fragment, useState, useContext } from 'react'
 import TextField from '@mui/material/TextField'
 import { ENTER_KEY_NUMBER } from '../Constants'
 import { TaskListsContext } from '../Contexts/TaskListsContext'
+import { tasksCount } from '../utils'
 
-const Tasks = ({ selectedTaskListIndex }) => {
+const Tasks = ({
+  selectedTaskListIndex,
+  selectedTaskListTasks,
+  onCreateNewTask,
+}) => {
   const { taskLists, setTaskLists } = useContext(TaskListsContext)
   const [newTaskName, setNewTaskName] = useState('')
-  const handleEnterKey = (e) => {
+  const handleEnterKey = e => {
     if (e.keyCode === ENTER_KEY_NUMBER) {
-      handleCreate()
+      onCreateNewTask(newTaskName)
+      setNewTaskName('')
     }
   }
 
-  const handleCreate = () => {
-    let tempTaskLists = [...taskLists]
-    tempTaskLists[selectedTaskListIndex].tasks.push({ name: newTaskName })
-    setTaskLists([...tempTaskLists])
-    setNewTaskName('')
-  }
-
-  const handleNewTaskNameChange = (e) => {
+  const handleNewTaskNameChange = e => {
     setNewTaskName(e.target.value)
   }
 
@@ -29,10 +28,10 @@ const Tasks = ({ selectedTaskListIndex }) => {
         <div>
           <div>
             {taskLists[selectedTaskListIndex]?.name} (
-            {taskLists[selectedTaskListIndex]?.tasks?.length})
+            {tasksCount(selectedTaskListTasks)})
           </div>
           <div>
-            {taskLists[selectedTaskListIndex]?.tasks?.map((task, index) => (
+            {selectedTaskListTasks?.map((task, index) => (
               <div key={index}>{task.name}</div>
             ))}
             <TextField
