@@ -12,6 +12,7 @@ import Button from '@mui/material/Button'
 import NewTaskListModal from './NewTaskListModal'
 import Tasks from './Tasks'
 import TasksLists from './TaskLists'
+import { fetchUserTasklists, fetchTasklistTasks } from '../Models/Tasklist'
 
 const Dashboard = () => {
   const [user, loading] = useAuthState(auth)
@@ -19,7 +20,7 @@ const Dashboard = () => {
   const [taskLists, setTaskLists] = useState([])
   const [isNewTaskModalOpen, setIsNewTaskModalOpen] = useState(false)
 
-  const [selectedTaskListIndex, setSelectedTaskListIndex] = React.useState(0)
+  const [selectedTaskListIndex, setSelectedTaskListIndex] = useState(0)
 
   const handleSelectedTaskListChange = (event, newValue) => {
     setSelectedTaskListIndex(newValue)
@@ -28,7 +29,26 @@ const Dashboard = () => {
   useEffect(() => {
     if (loading) return
     if (!user) return navigate('/')
+    else {
+      fetchUserTasklists(user.uid).then(data => {
+        setTaskLists(data)
+      })
+    }
   }, [user, loading, navigate])
+
+  useEffect(() => {
+    if (taskLists.length) {
+      console.log(
+        'fetch tasks for tasklist',
+        selectedTaskListIndex,
+        selectedTaskList()?.id
+      )
+
+      fetchTasklistTasks(selectedTaskList().id).then(data => {
+        console.log('fetchTasklistTasks', data)
+      })
+    }
+  }, [selectedTaskListIndex, taskLists])
 
   const onNewTaskModalOpen = () => {
     setIsNewTaskModalOpen(true)

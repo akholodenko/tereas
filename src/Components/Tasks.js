@@ -6,7 +6,7 @@ import { TaskListsContext } from '../Contexts/TaskListsContext'
 const Tasks = ({ selectedTaskListIndex }) => {
   const { taskLists, setTaskLists } = useContext(TaskListsContext)
   const [newTaskName, setNewTaskName] = useState('')
-  const handleEnterKey = e => {
+  const handleEnterKey = (e) => {
     if (e.keyCode === ENTER_KEY_NUMBER) {
       handleCreate()
     }
@@ -19,7 +19,7 @@ const Tasks = ({ selectedTaskListIndex }) => {
     setNewTaskName('')
   }
 
-  const handleNewTaskNameChange = e => {
+  const handleNewTaskNameChange = (e) => {
     setNewTaskName(e.target.value)
   }
 
@@ -32,7 +32,7 @@ const Tasks = ({ selectedTaskListIndex }) => {
             {taskLists[selectedTaskListIndex]?.tasks?.length})
           </div>
           <div>
-            {taskLists[selectedTaskListIndex]?.tasks.map((task, index) => (
+            {taskLists[selectedTaskListIndex]?.tasks?.map((task, index) => (
               <div key={index}>{task.name}</div>
             ))}
             <TextField

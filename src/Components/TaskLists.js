@@ -24,7 +24,7 @@ const TasksLists = ({
       {taskLists.map((taskList, index) => (
         <Tab
           key={index}
-          label={`${taskList.name} (${taskList.tasks.length})`}
+          label={`${taskList.name} (${taskList?.tasks?.length})`}
           {...taskListTabProps(index)}
         />
       ))}
