@@ -1,4 +1,6 @@
 import { useContext, useState, useEffect, useRef } from 'react'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { auth } from './../firebase'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import Dialog from '@mui/material/Dialog'
@@ -9,8 +11,10 @@ import DialogTitle from '@mui/material/DialogTitle'
 
 import { TaskListsContext } from '../Contexts/TaskListsContext'
 import { ENTER_KEY_NUMBER } from '../Constants'
+import { createTaskList } from '../Models/Tasklist'
 
 const NewTaskListModal = ({ isOpen, onNewTaskModalClosed }) => {
+  const [user, loading] = useAuthState(auth)
   const [taskListName, setTaskListName] = useState('')
   const { taskLists, setTaskLists } = useContext(TaskListsContext)
   const inputRef = useRef(null)
@@ -37,7 +41,15 @@ const NewTaskListModal = ({ isOpen, onNewTaskModalClosed }) => {
   }
 
   const handleCreate = () => {
-    setTaskLists([...taskLists, { name: taskListName }])
+    createTaskList({ name: taskListName, uid: user.uid }).then(
+      newTasklistId => {
+        setTaskLists([
+          ...taskLists,
+          { name: taskListName, uid: user.uid, id: newTasklistId },
+        ])
+      }
+    )
+
     handleClose()
   }
 

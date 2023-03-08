@@ -1,4 +1,11 @@
-import { query, collection, getDocs, where, doc } from 'firebase/firestore'
+import {
+  query,
+  collection,
+  getDocs,
+  where,
+  doc,
+  addDoc,
+} from 'firebase/firestore'
 import { db } from './../firebase'
 
 export const fetchUserTasklists = async userUid => {
@@ -22,25 +29,45 @@ export const fetchUserTasklists = async userUid => {
 
 export const fetchTasklistTasks = async tasklistId => {
   try {
-    const tasklistRef = doc(db, 'tasklists', tasklistId)
+    if (tasklistId) {
+      const tasklistRef = doc(db, 'tasklists', tasklistId)
 
-    const q = query(
-      collection(db, 'tasks'),
-      where('tasklistId', '==', tasklistRef)
-    )
+      const q = query(
+        collection(db, 'tasks'),
+        where('tasklistId', '==', tasklistRef)
+      )
 
-    const files = await getDocs(q)
+      const files = await getDocs(q)
 
-    let processedTasks = []
-    if (files.docs && files.docs.length) {
-      processedTasks = files.docs.map(obj => {
-        return { ...obj.data(), id: obj.id }
-      })
+      let processedTasks = []
+      if (files.docs && files.docs.length) {
+        processedTasks = files.docs.map(obj => {
+          return { ...obj.data(), id: obj.id }
+        })
+      }
+
+      return processedTasks
+    } else {
+      return []
     }
-
-    return processedTasks
   } catch (err) {
     console.error(err)
     alert('An error occured while fetching user tasks data')
   }
 }
+
+export const createTaskList = async tasklist => {
+  if (isValidTasklist(tasklist)) {
+    const docRef = await addDoc(collection(db, 'tasklists'), {
+      name: tasklist.name,
+      uid: tasklist.uid,
+    })
+    console.log('Document written with ID: ', docRef.id)
+
+    return docRef.id
+  } else {
+    return null
+  }
+}
+
+const isValidTasklist = tasklist => tasklist && tasklist.name && tasklist.uid

@@ -9,7 +9,7 @@ const Tasks = ({
   selectedTaskListTasks,
   onCreateNewTask,
 }) => {
-  const { taskLists, setTaskLists } = useContext(TaskListsContext)
+  const { taskLists } = useContext(TaskListsContext)
   const [newTaskName, setNewTaskName] = useState('')
   const handleEnterKey = e => {
     if (e.keyCode === ENTER_KEY_NUMBER) {

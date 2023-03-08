@@ -33,17 +33,22 @@ const Dashboard = () => {
     else {
       fetchUserTasklists(user.uid).then(data => {
         setTaskLists(data)
+        const firstTaskListId = data[0]?.id
+
+        console.log('TODO: fetch counts for all tasklists')
+        if (firstTaskListId)
+          fetchTasklistTasks(firstTaskListId).then(data => {
+            let newTasks = { ...tasks }
+            newTasks[firstTaskListId] = data
+            setTasks(newTasks)
+          })
       })
     }
   }, [user, loading, navigate])
 
   useEffect(() => {
     if (taskLists.length) {
-      fetchTasklistTasks(selectedTaskList().id).then(data => {
-        let newTasks = { ...tasks }
-        newTasks[selectedTaskList().id] = data
-        setTasks(newTasks)
-      })
+      setSelectedTaskListIndex(taskLists.length - 1)
     }
   }, [taskLists])
 
@@ -53,9 +58,6 @@ const Dashboard = () => {
 
   const onNewTaskModalClosed = () => {
     setIsNewTaskModalOpen(false)
-    if (taskLists && taskLists.length) {
-      setSelectedTaskListIndex(taskLists.length)
-    }
   }
 
   const onCreateNewTask = newTaskName => {
@@ -79,7 +81,9 @@ const Dashboard = () => {
   }
 
   const selectedTaskList = () =>
-    taskLists && taskLists.length ? taskLists[selectedTaskListIndex] : null
+    taskLists && taskLists.length
+      ? taskLists[selectedTaskListIndex]
+      : { id: null }
 
   const selectedTaskListTasks = () =>
     tasks && tasks.length ? tasks[selectedTaskList().id] : null
