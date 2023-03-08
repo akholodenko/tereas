@@ -33,15 +33,19 @@ const Dashboard = () => {
     else {
       fetchUserTasklists(user.uid).then(data => {
         setTaskLists(data)
-        const firstTaskListId = data[0]?.id
 
-        console.log('TODO: fetch counts for all tasklists')
-        if (firstTaskListId)
-          fetchTasklistTasks(firstTaskListId).then(data => {
-            let newTasks = { ...tasks }
-            newTasks[firstTaskListId] = data
-            setTasks(newTasks)
+        if (data && data.length) {
+          let fetchedTasks = {}
+
+          data.forEach(tasklist => {
+            fetchTasklistTasks(tasklist.id).then(data => {
+              fetchedTasks[tasklist.id] = data
+              console.log(data, fetchedTasks)
+
+              setTasks(fetchedTasks)
+            })
           })
+        }
       })
     }
   }, [user, loading, navigate])
