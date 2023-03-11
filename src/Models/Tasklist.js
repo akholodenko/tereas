@@ -5,6 +5,7 @@ import {
   where,
   doc,
   addDoc,
+  deleteDoc,
 } from 'firebase/firestore'
 import { db } from './../firebase'
 
@@ -67,6 +68,12 @@ export const createTaskList = async tasklist => {
     return docRef.id
   } else {
     return null
+  }
+}
+
+export const deleteTaskList = async tasklistId => {
+  if (tasklistId) {
+    await deleteDoc(doc(db, 'tasklists', tasklistId))
   }
 }
 

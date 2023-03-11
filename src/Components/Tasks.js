@@ -1,13 +1,16 @@
 import { Fragment, useState, useContext } from 'react'
 import TextField from '@mui/material/TextField'
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import { ENTER_KEY_NUMBER } from '../Constants'
 import { TaskListsContext } from '../Contexts/TaskListsContext'
 import { tasksCount } from '../utils'
+import { Button } from '@mui/material'
 
 const Tasks = ({
   selectedTaskListIndex,
   selectedTaskListTasks,
   onCreateNewTask,
+  onDeleteSelectedTaskist,
 }) => {
   const { taskLists } = useContext(TaskListsContext)
   const [newTaskName, setNewTaskName] = useState('')
@@ -29,6 +32,12 @@ const Tasks = ({
           <div>
             {taskLists[selectedTaskListIndex]?.name} (
             {tasksCount(selectedTaskListTasks)})
+            <Button
+              variant="outlined"
+              onClick={() => onDeleteSelectedTaskist()}
+            >
+              <DeleteForeverIcon />
+            </Button>
           </div>
           <div>
             {selectedTaskListTasks?.map((task, index) => (

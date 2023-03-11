@@ -12,7 +12,11 @@ import Button from '@mui/material/Button'
 import NewTaskListModal from './NewTaskListModal'
 import Tasks from './Tasks'
 import TasksLists from './TaskLists'
-import { fetchUserTasklists, fetchTasklistTasks } from '../Models/Tasklist'
+import {
+  fetchUserTasklists,
+  fetchTasklistTasks,
+  deleteTaskList,
+} from '../Models/Tasklist'
 
 const Dashboard = () => {
   const [user, loading] = useAuthState(auth)
@@ -40,7 +44,7 @@ const Dashboard = () => {
           data.forEach(tasklist => {
             fetchTasklistTasks(tasklist.id).then(data => {
               fetchedTasks[tasklist.id] = data
-              console.log(data, fetchedTasks)
+              // console.log(data, fetchedTasks)
 
               setTasks(fetchedTasks)
             })
@@ -84,13 +88,19 @@ const Dashboard = () => {
     setTasks({ ...tempTasks })
   }
 
+  const onDeleteSelectedTaskist = () => {
+    deleteTaskList(selectedTaskList().id).then(() => {
+      let tempTaskLists = taskLists
+      tempTaskLists.splice(selectedTaskListIndex, 1)
+      setTaskLists([...tempTaskLists])
+      setSelectedTaskListIndex(taskLists.length - 1)
+    })
+  }
+
   const selectedTaskList = () =>
     taskLists && taskLists.length
       ? taskLists[selectedTaskListIndex]
       : { id: null }
-
-  const selectedTaskListTasks = () =>
-    tasks && tasks.length ? tasks[selectedTaskList().id] : null
 
   return (
     <div className="dashboard">
@@ -122,6 +132,7 @@ const Dashboard = () => {
                 selectedTaskListIndex={selectedTaskListIndex}
                 selectedTaskListTasks={tasks[selectedTaskList()?.id]}
                 onCreateNewTask={onCreateNewTask}
+                onDeleteSelectedTaskist={onDeleteSelectedTaskist}
               />
             </Grid>
           </Grid>
